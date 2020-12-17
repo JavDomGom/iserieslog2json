@@ -1,5 +1,74 @@
 #include "auditlogreader.h"
 
+char **loadfile(char *filename)
+{
+	FILE *f = fopen(filename, "r");
+	if (!f)
+	{
+		fprintf(stderr, "Can't open %s for reading.\n", filename);
+		return NULL;
+	}
+
+	int arrlen = 0;
+
+	// Allocate space for 100 char *.
+	char **lines = NULL;
+
+	char buf[LINE_MAX_SIZE];
+	int i = 0;
+
+	while (fgets(buf, LINE_MAX_SIZE, f))
+	{
+		// Check if array is full. If so, extended it.
+		if (i == arrlen)
+		{
+			arrlen += CHUNK_SIZE;
+
+			char **newlines = realloc(lines, arrlen * sizeof(char *));
+			if (!newlines)
+			{
+				fprintf(stderr, "Can't realloc.\n");
+				exit(1);
+			}
+			lines = newlines;
+		}
+		// Trim off newline char.
+		buf[strlen(buf) - 1] = '\0';
+
+		// Get lenght of buf.
+		int slen = strlen(buf);
+
+		// Allocate space for the string.
+		char *str = (char *)malloc((slen + 1) * sizeof(char));
+
+		// Copy string from buf to str.
+		strcpy(str, buf);
+
+		// Attach str to data structure.
+		lines[i] = str;
+
+		i++;
+	}
+
+	if (i == arrlen)
+	{
+		char **newarr = realloc(lines, (arrlen + 1) * sizeof(char *));
+		
+		if (!newarr)
+		{
+			fprintf(stderr, "Can't realloc.\n");
+			exit(1);
+		}
+		
+		lines = newarr;
+	}
+	
+
+	lines[i] = NULL;
+
+	return lines;
+}
+
 bool prefix(const char *pre, const char *str, size_t n)
 {
 	return strncmp(pre, str, n) == 0;

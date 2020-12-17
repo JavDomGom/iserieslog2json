@@ -2,7 +2,6 @@
 #include <string.h>
 #include "auditlogreader.h"
 
-
 int main(int argc, char *argv[])
 {
 	if (argc < 2) return 1;
@@ -45,11 +44,11 @@ int main(int argc, char *argv[])
 		// Set audit log file name as fileName field in struct.
 		strcpy(al.fileName, filename);
 
-		free(trim_line);
-
 		n_line++;
 	}
 
+	free(trim_line);
 	free(line);
+	
 	exit(EXIT_SUCCESS);
 }

@@ -10,6 +10,9 @@
 #include <ctype.h>
 #include <time.h>
 
+#define CHUNK_SIZE 100
+#define LINE_MAX_SIZE 205
+
 #define HEADER_MAXSTRLEN 9
 #define HEADER_MAXWORDS 4
 #define PAGE_MAXSTRLEN 27
@@ -54,6 +57,7 @@ typedef struct
 } auditLog;
 
 
+char **loadfile(char *filename);
 bool prefix(const char *pre, const char *str, size_t n);
 char *rtrim(const char *s);
 char *ltrim(const char *s);
