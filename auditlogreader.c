@@ -144,8 +144,8 @@ void processLogPage(char *line, auditLog *al, int *n_msgs)
 
 	memset(&tm, 0, sizeof(struct tm));
 
-	// If last word in line is valid formated datetime.
-	if (strptime(lastWord + 1, "%Y-%m-%d-%H.%M.%S", &tm))
+	// If lastWord is not null and last word in line is valid formated datetime.
+	if (lastWord && strptime(lastWord + 1, "%Y-%m-%d-%H.%M.%S", &tm))
 	{
 		// Clean last commandLine if exist.
 		strcpy(al->commandLine, "");
@@ -178,14 +178,8 @@ void processLogPage(char *line, auditLog *al, int *n_msgs)
 		strcat(strcat(al->commandLine, " "), line);
 	}
 
-	// Print last message if exist.
-	if (*n_msgs > 0)
-	{
-		printStructToJSON(al);
-
-		// printf("Press ENTER key to continue ...\n");
-		// getchar();
-	}
+	// Print last processed message if exist.
+	if (*n_msgs > 0) printStructToJSON(al);
 }
 
 void printStructToJSON(auditLog *al)
