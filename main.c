@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	char *filename = argv[1], *trim_line = NULL;
+	char *filename = argv[1];
 	int n_line = 0, n_msgs = 0;
 	bool isPage = false;
 
@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
 	// Process the entire file line by line.
 	for (int i = 0; lines[i] != NULL; i++)
 	{
-		trim_line = trim(lines[i]);
-
 		// The first five lines are the header. The third line can be excluded.
 		if (!isPage && (n_line <= 5) && (n_line != 2))
 		{
@@ -49,12 +47,18 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
+		char *trim_line = trim(lines[i]);
+
 		// If it's a page, the lines are processed from the fourth n_line.
 		if (isPage && (n_line > 3)) processLogPage(trim_line, &al, &n_msgs);
+
+		free(trim_line);
 
 		// Set audit log file name as fileName field in struct.
 		strcpy(al.fileName, filename);
 		
 		n_line++;
 	}
+
+	exit(EXIT_SUCCESS);
 }

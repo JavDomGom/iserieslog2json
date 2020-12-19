@@ -39,16 +39,17 @@ char **loadfile(char *filename)
 		int slen = strlen(buf);
 
 		// Allocate space for the string.
-		char *str = (char *)malloc((slen + 1) * sizeof(char));
+		char *str = malloc((slen + 1) * sizeof(char));
 
 		// Copy string from buf to str.
 		strcpy(str, buf);
 
 		// Attach str to data structure.
 		lines[i] = str;
-
+		
 		i++;
 	}
+	fclose(f);
 
 	if (i == arrlen)
 	{
@@ -114,6 +115,8 @@ void processLogHeader(char *line, auditLog *al, int n_line)
 		i++;
 	}
 
+	free(pch);
+
 	switch (n_line)
 	{
 	case 0:
@@ -147,6 +150,9 @@ void processLogPage(char *line, auditLog *al, int *n_msgs)
 	// If lastWord is not null and last word in line is valid formated datetime.
 	if (lastWord && strptime(lastWord + 1, "%Y-%m-%d-%H.%M.%S", &tm))
 	{
+		// Print last processed message if exist.
+		if (*n_msgs > 0) printStructToJSON(al);
+
 		// Clean last commandLine if exist.
 		strcpy(al->commandLine, "");
 
@@ -177,21 +183,18 @@ void processLogPage(char *line, auditLog *al, int *n_msgs)
 	} else {
 		strcat(strcat(al->commandLine, " "), line);
 	}
-
-	// Print last processed message if exist.
-	if (*n_msgs > 0) printStructToJSON(al);
 }
 
 void printStructToJSON(auditLog *al)
 {
-    printf("{\"headerQueryName\": \"%s\", ", al->headerQueryName);
-    printf("\"headerLibraryName\": \"%s\", ", al->headerLibraryName);
-    printf("\"headerFile\": \"%s\", ", al->headerFile);
-    printf("\"headerLibrary\": \"%s\", ", al->headerLibrary);
-    printf("\"headerMember\": \"%s\", ", al->headerMember);
-    printf("\"headerFormat\": \"%s\", ", al->headerFormat);
-    printf("\"headerDate\": \"%s\", ", al->headerDate);
-    printf("\"headerTime\": \"%s\", ", al->headerTime);
+	printf("{\"headerQueryName\": \"%s\", ", al->headerQueryName);
+	printf("\"headerLibraryName\": \"%s\", ", al->headerLibraryName);
+	printf("\"headerFile\": \"%s\", ", al->headerFile);
+	printf("\"headerLibrary\": \"%s\", ", al->headerLibrary);
+	printf("\"headerMember\": \"%s\", ", al->headerMember);
+	printf("\"headerFormat\": \"%s\", ", al->headerFormat);
+	printf("\"headerDate\": \"%s\", ", al->headerDate);
+	printf("\"headerTime\": \"%s\", ", al->headerTime);
 	printf("\"typeInput\": \"%s\", ", al->typeInput);
 	printf("\"mode\": \"%s\", ", al->mode);
 	printf("\"userProfile\": \"%s\", ", al->userProfile);
