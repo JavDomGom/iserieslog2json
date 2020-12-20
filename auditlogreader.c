@@ -11,7 +11,7 @@ char **loadfile(char *filename)
 
 	int arrlen = 0;
 
-	// Allocate space for 100 char *.
+	// Allocate space for CHUNK_SIZE char *.
 	char **lines = NULL;
 
 	char buf[LINE_MAX_SIZE];
@@ -46,7 +46,7 @@ char **loadfile(char *filename)
 
 		// Attach str to data structure.
 		lines[i] = str;
-		
+
 		i++;
 	}
 	fclose(f);
@@ -114,8 +114,6 @@ void processLogHeader(char *line, auditLog *al, int n_line)
 		pch = strtok(NULL, " .");
 		i++;
 	}
-
-	free(pch);
 
 	switch (n_line)
 	{

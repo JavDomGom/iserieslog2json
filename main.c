@@ -60,5 +60,7 @@ int main(int argc, char *argv[])
 		n_line++;
 	}
 
+	free(*lines);
+
 	exit(EXIT_SUCCESS);
 }

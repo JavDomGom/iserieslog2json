@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <time.h>
 
-#define CHUNK_SIZE 100
+#define CHUNK_SIZE 500
 #define LINE_MAX_SIZE 205
 
 #define HEADER_MAXSTRLEN 9
@@ -28,7 +28,7 @@
 #define JOB_NUMBER_MAXSTRLEN 10
 #define DATETIME_MAXSTRLEN 30
 #define COMMAND_LINE_MAXSTRLEN 1024
-#define FILENAME_MAXSTRLEN 30
+#define FILENAME_MAXSTRLEN 27
 #define SERVER_NAME_MAXSTRLEN 15
 
 typedef struct
