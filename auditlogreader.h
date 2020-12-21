@@ -11,7 +11,7 @@
 #include <time.h>
 
 #define CHUNK_SIZE 500
-#define LINE_MAX_SIZE 205
+#define LINE_MAX_SIZE 210
 
 #define HEADER_MAXSTRLEN 9
 #define HEADER_MAXWORDS 4
@@ -65,6 +65,7 @@ char *trim(const char *s);
 void processLogHeader(char *line, auditLog *al, int n_line);
 void processLogPage(char *line, auditLog *al, int *n_msgs);
 void printStructToJSON(auditLog *al);
+void showUsage(char *programName);
 
 #define INIT_AUDITLOG(X) auditLog X = { \
 	.headerQueryName = "", \

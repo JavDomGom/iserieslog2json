@@ -207,3 +207,9 @@ void printStructToJSON(auditLog *al)
 	printf("\"fileName\": \"%s\", ", al->fileName);
 	printf("\"serverName\": \"%s\"}\n", al->serverName);
 }
+
+void showUsage(char *programName)
+{
+	fprintf(stderr, "Usage: %s -f filename\n", programName);
+	exit(EXIT_FAILURE);
+}
