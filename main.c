@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
-#include "auditlogreader.h"
+#include "auditlog2json.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,11 +17,24 @@ int main(int argc, char *argv[])
 			case 'f':
 				filename = optarg;
 				break;
-			default: showUsage(argv[0]);
+			case '?':
+				if (optopt == 'f')
+					printUsage(argv[0]);
+				else if (isprint(optopt))
+					fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+				else
+					fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
+				exit(EXIT_FAILURE);
+			default:
+				abort();
 		}
 	}
 
-	if (argc == 1) showUsage(argv[0]);
+	if (argc < 3)
+	{
+		printUsage(argv[0]);
+		exit(EXIT_FAILURE);
+	}
 
 	// Load file into memory data structure using dynamically-sized arrays.
 	char **lines = loadfile(filename);

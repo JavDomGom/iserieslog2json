@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -g
-PROGRAM_NAME=main
-DEPS=auditlogreader.c auditlogreader.h
+PROGRAM_NAME=auditlog2json
+DEPS=$(PROGRAM_NAME).c $(PROGRAM_NAME).h
 
-main: $(PROGRAM_NAME).c $(DEPS)
-	$(CC) $(CFLAGS) -o $(PROGRAM_NAME) $(PROGRAM_NAME).c $(DEPS)
+build: main.c $(DEPS)
+	$(CC) $(CFLAGS) -o $(PROGRAM_NAME) main.c $(DEPS)

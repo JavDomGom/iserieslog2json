@@ -1,4 +1,4 @@
-#include "auditlogreader.h"
+#include "auditlog2json.h"
 
 char **loadfile(char *filename)
 {
@@ -6,7 +6,7 @@ char **loadfile(char *filename)
 	if (!f)
 	{
 		fprintf(stderr, "Can't open %s for reading.\n", filename);
-		return NULL;
+		exit(EXIT_FAILURE);
 	}
 
 	int arrlen = 0;
@@ -208,8 +208,7 @@ void printStructToJSON(auditLog *al)
 	printf("\"serverName\": \"%s\"}\n", al->serverName);
 }
 
-void showUsage(char *programName)
+void printUsage(char *programName)
 {
-	fprintf(stderr, "Usage: %s -f filename\n", programName);
-	exit(EXIT_FAILURE);
+	printf("Usage: %s -f filename\n", programName);
 }

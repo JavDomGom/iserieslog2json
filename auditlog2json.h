@@ -1,5 +1,5 @@
-#ifndef AUDITLOGREADER_H
-#define AUDITLOGREADER_H
+#ifndef AUDITLOG2JSON_H
+#define AUDITLOG2JSON_H
 
 #define _GNU_SOURCE
 
@@ -28,7 +28,7 @@
 #define JOB_NUMBER_MAXSTRLEN 10
 #define DATETIME_MAXSTRLEN 30
 #define COMMAND_LINE_MAXSTRLEN 1024
-#define FILENAME_MAXSTRLEN 27
+#define FILENAME_MAXSTRLEN 128
 #define SERVER_NAME_MAXSTRLEN 15
 
 typedef struct
@@ -65,7 +65,7 @@ char *trim(const char *s);
 void processLogHeader(char *line, auditLog *al, int n_line);
 void processLogPage(char *line, auditLog *al, int *n_msgs);
 void printStructToJSON(auditLog *al);
-void showUsage(char *programName);
+void printUsage(char *programName);
 
 #define INIT_AUDITLOG(X) auditLog X = { \
 	.headerQueryName = "", \
