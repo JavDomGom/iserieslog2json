@@ -13,7 +13,7 @@
 #define CHUNK_SIZE 500
 #define LINE_MAX_SIZE 210
 
-#define HEADER_MAXSTRLEN 9
+#define HEADER_MAXSTRLEN 10
 #define HEADER_MAXWORDS 4
 #define PAGE_MAXSTRLEN 27
 #define PAGE_MAXWORDS 11
@@ -56,8 +56,6 @@ typedef struct
 	char serverName[SERVER_NAME_MAXSTRLEN];
 } auditLog;
 
-
-char **loadfile(char *filename);
 bool prefix(const char *pre, const char *str, size_t n);
 char *rtrim(const char *s);
 char *ltrim(const char *s);

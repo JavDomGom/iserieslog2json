@@ -7,9 +7,11 @@
 
 int main(int argc, char *argv[])
 {
-	int opt;
-	char *filename = NULL;
-	int n_line = 0, n_msgs = 0;
+	char *filename = argv[1], *line = NULL;
+	int n_line = 0, n_msgs = 0, opt;
+	size_t len = 0;
+	ssize_t read;
+	FILE *fp;
 	bool isPage = false;
 
 	while ((opt = getopt(argc, argv, "f:")) != -1) {
@@ -36,47 +38,45 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	// Load file into memory data structure using dynamically-sized arrays.
-	char **lines = loadfile(filename);
-
-	if (!lines)
-	{
-		fprintf(stderr, "Can't build data structure.");
-		exit(1);
-	}
-
 	INIT_AUDITLOG(al);
 
-	// Process the entire file line by line.
-	for (int i = 0; lines[i] != NULL; i++)
+	fp = fopen(filename, "r");
+	if (fp == NULL) exit(EXIT_FAILURE);
+
+	while ((read = getline(&line, &len, fp)) != -1)
 	{
+		char *trim_line = trim(line);
+
 		// The first five lines are the header. The third line can be excluded.
 		if (!isPage && (n_line <= 5) && (n_line != 2))
 		{
-			processLogHeader(lines[i], &al, n_line);
+			processLogHeader(trim_line, &al, n_line);
 		}
 
-		// If line starts with "* * *" is the end of log.
+		// If trim_line starts with "* * *" is the end of log.
 		// Print last processed message and break for loop.
-		if (prefix(lines[i], "* * *", 5))
+		if (prefix(trim_line, "* * *", 5))
 		{
 			printStructToJSON(&al);
+			free(trim_line);
 			break;
 		}
 
-		// If line starts with al.headerDate is a new page.
+		// If trim_line starts with al.headerDate is a new page.
 		// Set isPage to true and reset n_line to 0 to control page lines.
-		if (prefix(lines[i], al.headerDate, HEADER_MAXSTRLEN - 1))
+		if (prefix(trim_line, al.headerDate, HEADER_MAXSTRLEN - 2))
 		{
 			isPage = true;
 			n_line = 0;
+			free(trim_line);
 			continue;
 		}
 
-		char *trim_line = trim(lines[i]);
-
 		// If it's a page, the lines are processed from the fourth n_line.
-		if (isPage && (n_line > 3)) processLogPage(trim_line, &al, &n_msgs);
+		if (isPage && (n_line > 3))
+		{
+			processLogPage(trim_line, &al, &n_msgs);
+		}
 
 		free(trim_line);
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 		n_line++;
 	}
 
-	free(*lines);
+	free(line);
 
 	exit(EXIT_SUCCESS);
 }
