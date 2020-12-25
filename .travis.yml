@@ -1,0 +1,6 @@
+os: linux
+dist: bionic
+language: c
+compiler: gcc
+script:
+  - make build
