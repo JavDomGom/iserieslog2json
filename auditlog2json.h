@@ -10,6 +10,10 @@
 #include <ctype.h>
 #include <time.h>
 
+#define PROGRAM_NAME "auditlog2json"
+#define PROGRAM_VERSION "0.01"
+#define AUTHORS "Javier Dominguez Gomez"
+
 #define CHUNK_SIZE 500
 #define LINE_MAX_SIZE 210
 
@@ -56,14 +60,15 @@ typedef struct
 	char serverName[SERVER_NAME_MAXSTRLEN];
 } auditLog;
 
-bool prefix(const char *pre, const char *str, size_t n);
-char *rtrim(const char *s);
-char *ltrim(const char *s);
-char *trim(const char *s);
-void processLogHeader(char *line, auditLog *al, int n_line);
-void processLogPage(char *line, auditLog *al, int *n_msgs);
-void printStructToJSON(auditLog *al);
-void printUsage(char *programName);
+bool prefix (const char *pre, const char *str, size_t n);
+char *rtrim (const char *s);
+char *ltrim (const char *s);
+char *trim (const char *s);
+void processLogHeader (char *line, auditLog *al, int n_line);
+void processLogPage (char *line, auditLog *al, int *n_msgs);
+void printStructToJSON (auditLog *al);
+void printUsage ();
+void help ();
 
 #define INIT_AUDITLOG(X) auditLog X = { \
 	.headerQueryName = "", \
