@@ -1,10 +1,11 @@
 <p align="center"><img src="https://github.com/JavierDominguezGomez/AS400_auditlog2json/blob/main/img/AS400_auditlog2json_logo.png"></p>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![GitHub top language](https://img.shields.io/github/languages/top/JavierDominguezGomez/AS400_auditlog2json)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/JavierDominguezGomez/AS400_auditlog2json)
-[![Build Status](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json.svg?branch=master)](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JavierDominguezGomez/AS400_auditlog2json.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JavierDominguezGomez/AS400_auditlog2json/context:cpp)
+[![Build Status](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json.svg?branch=main)](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-yellow.svg)
 
 ## Basic Overview
@@ -33,7 +34,7 @@ The auditlog2json tool converts information from IBM iSeries audit report log fi
 
 ```
                                                                            QUERY NAME . . QSECCD
-                                                                            LIBRARY NAME . .QSYS
+                                                                           LIBRARY NAME  . .QSYS
                                                              FILE      LIBRARY  MEMBER    FORMAT
                                                            QASYCDJ4  QTEMP    QASYCDJ4  QASYCDJ4
                                                                      DATE . . . . . . . 14/04/20
@@ -50,6 +51,8 @@ CHKOBJ OBJ(MIMIX/HTSPCLVL) OBJTYPE(*DTAARA)
 CD   C   MIMIXOWN   CALL     QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.104765
 CALL PGM(MXTHRUPUT) PARM('SOURCE')
 ...
+...
+Several million lines ...
 ...
 ...
 CD   X   QSECOFR    QSH      QSYS     B   BFI_HW     QSECOFR   481054 2020-04-14-00.00.00.113517
