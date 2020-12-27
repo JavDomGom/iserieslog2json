@@ -1,24 +1,29 @@
 <p align="center"><img src="https://github.com/JavierDominguezGomez/AS400_auditlog2json/blob/main/img/AS400_auditlog2json_logo.png"></p>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+## Status
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![GitHub top language](https://img.shields.io/github/languages/top/JavierDominguezGomez/AS400_auditlog2json)
+[![Release](https://img.shields.io/badge/release-v1.0.0-brightgreen)](https://github.com/JavierDominguezGomez/AS400_auditlog2json/releases/latest)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/JavierDominguezGomez/AS400_auditlog2json)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JavierDominguezGomez/AS400_auditlog2json.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JavierDominguezGomez/AS400_auditlog2json/context:cpp)
-[![Build Status](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json.svg?branch=main)](https://travis-ci.org/JavierDominguezGomez/AS400_auditlog2json)
+[![Build Status](https://travis-ci.com/JavierDominguezGomez/AS400_auditlog2json.svg?branch=main)](https://travis-ci.com/github/JavierDominguezGomez/AS400_auditlog2json)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-yellow.svg)
 
-## Basic Overview
+## Basic overview
 
-The auditlog2json tool converts information from IBM iSeries audit report log files on an AS400 system to a JSON format that is much more understandable and easy to process on most computers and systems.
+**auditlog2json** converts IBM iSeries audit report log files from AS400 system to JSON format, that is much more understandable and easy to process on most computers and systems.
 
-## How to compile
+## Compilation
+
+To compile the source code on GNU/Linux, Unix or OSX systems, it is highly recommended to install and use [GCC](https://gcc.gnu.org/install/) and [GNU Make](https://www.gnu.org/software/make/).
 
 ```bash
 ~$ make build
 ```
 
 ## Memory check
+
+The [Valgrind](https://valgrind.org/docs/manual/quick-start.html) tool suite provides a number of debugging and profiling tools that help you make your programs faster and more correct. The most popular of these tools is called Memcheck. It can detect many memory-related errors that are common in C and C++ programs and that can lead to crashes and unpredictable behaviour.
 
 ```bash
 ~$ make valgrind FILE=audit.log
@@ -83,3 +88,12 @@ DLYJOB DLY(5)
 {"headerQueryName": "QSECCD", "headerLibraryName": "QSYS", "headerFile": "QASYCDJ4", "headerLibrary": "QTEMP", "headerMember": "QASYCDJ4", "headerFormat": "QASYCDJ4", "headerDate": "14/04/20", "headerTime": "01:03:07", "typeInput": "CD", "mode": "C", "userProfile": "ADMSSRA1", "objectName": "CHKOBJ", "libraryName": "QSYS", "progCL": "E", "jobName": "RMTSYSTEM", "jobUser": "CNDINST", "jobNumber": "886460", "dateTime": "2020-10-28-23.59.57.624928", "commandLine": " CHKOBJ OBJ(CDUQ886459) OBJTYPE(*USRQ)", "fileName": "audit.log", "serverName": "jdghost"}
 {"headerQueryName": "QSECCD", "headerLibraryName": "QSYS", "headerFile": "QASYCDJ4", "headerLibrary": "QTEMP", "headerMember": "QASYCDJ4", "headerFormat": "QASYCDJ4", "headerDate": "14/04/20", "headerTime": "01:03:07", "typeInput": "CD", "mode": "C", "userProfile": "MDOWNER", "objectName": "DLYJOB", "libraryName": "QSYS", "progCL": "Y", "jobName": "MDPUSH1", "jobUser": "MDOWNER", "jobNumber": "674561", "dateTime": "2020-10-28-23.59.59.052944", "commandLine": " DLYJOB DLY(5)", "fileName": "audit.log", "serverName": "jdghost"}
 ```
+
+## Questions
+
+If you have questions, please email inquiries to <JavDomGom@protonmail.com>.
+
+If you don't understand the documentation, please tell us, so we can explain it
+better. The general idea is: if you need to ask for help, then something needs
+to be fixed so you (and others) don't need to ask for help. Asking questions
+helps us to know what needs to be documented, described, and/or fixed.

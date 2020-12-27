@@ -1,6 +1,9 @@
-os: linux
-dist: bionic
 language: c
+jobs:
+  include:
+    - name: "GNU/Linux Bionic"
+      os: linux
+      dist: bionic
 compiler: gcc
 script:
   - make build

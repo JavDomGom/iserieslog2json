@@ -11,7 +11,7 @@
 #include <time.h>
 
 #define PROGRAM_NAME "auditlog2json"
-#define PROGRAM_VERSION "0.01"
+#define PROGRAM_VERSION "v1.0.0"
 #define AUTHORS "Javier Dominguez Gomez"
 
 #define CHUNK_SIZE 500
