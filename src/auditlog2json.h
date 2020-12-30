@@ -94,4 +94,4 @@ void help ();
 	.serverName = "" \
 }
 
-#endif
+#endif  /* AUDITLOG2JSON_H */

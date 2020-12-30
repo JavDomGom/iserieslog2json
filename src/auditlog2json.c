@@ -1,4 +1,4 @@
-#include "auditlog2json.h"
+#include "../src/auditlog2json.h"
 
 bool prefix (const char *pre, const char *str, size_t n)
 {
@@ -155,7 +155,7 @@ void help ()
 \tsystem to a JSON  format that is much more  understandable and easy to process\n\
 \ton most computers and systems.\n"), stdout);
 	fputs (("\nOPTIONS\n"), stdout);
-	fputs (("\
+	fputs (("\n\
 \t-f, --file\tFile input with audit log data.\n\
 \t-v, --version\tPrint the program version.\n\
 \t-h, --help\tPrint this help.\n"), stdout);

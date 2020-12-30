@@ -1,11 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
 #include "auditlog2json.h"
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	char *filename = argv[1], *line = NULL;
 	int n_line = 0, n_msgs = 0, opt;
@@ -61,7 +58,7 @@ int main(int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 
-	INIT_AUDITLOG(al);
+	INIT_AUDITLOG (al);
 
 	fp = fopen (filename, "r");
 	if (fp == NULL) exit (EXIT_FAILURE);

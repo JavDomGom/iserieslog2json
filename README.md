@@ -7,29 +7,73 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/JavierDominguezGomez/AS400_auditlog2json)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JavierDominguezGomez/AS400_auditlog2json.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JavierDominguezGomez/AS400_auditlog2json/context:cpp)
 [![Build Status](https://travis-ci.com/JavierDominguezGomez/AS400_auditlog2json.svg?branch=main)](https://travis-ci.com/github/JavierDominguezGomez/AS400_auditlog2json)
-![Contributions welcome](https://img.shields.io/badge/contributions-welcome-yellow.svg)
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 
 ## Basic overview
 
 **auditlog2json** converts IBM iSeries audit report log files from AS400 system to JSON format, that is much more understandable and easy to process on most computers and systems.
 
-## Compilation
+## Dependencies
 
-To compile the source code on GNU/Linux, Unix or OSX systems, it is highly recommended to install and use [GCC](https://gcc.gnu.org/install/) and [GNU Make](https://www.gnu.org/software/make/).
+Check has the following dependencies:
+
+- [GCC](https://gcc.gnu.org/install/) (required)
+- [GNU Make](https://www.gnu.org/software/make/) (optional, can be compiled manually)
+- [Check](https://github.com/libcheck/check) (optional, for testing)
+- [Gcovr](https://github.com/gcovr/gcovr) (optional, to generate code coverage reports)
+- [Valgrind](https://valgrind.org/docs/manual/quick-start.html) (optional, to detect many memory-related errors)
+
+## Building or install on GNU/Linux
+
+On a GNU/Linux system you can build and install **auditlog2json** with the usual `sudo make install` procedure.
+
+```bash
+~$ sudo make install
+```
+
+This way you will have the binary available in `/usr/local/bin/auditlog2json` to run it from any directory on your computer.
+
+To uninstall:
+
+```bash
+~$ sudo make uninstall
+```
+
+If you just want to compile the code and get a binary in the current directory you must run `make build` without `sudo`.
 
 ```bash
 ~$ make build
 ```
 
-## Memory check
-
-The [Valgrind](https://valgrind.org/docs/manual/quick-start.html) tool suite provides a number of debugging and profiling tools that help you make your programs faster and more correct. The most popular of these tools is called Memcheck. It can detect many memory-related errors that are common in C and C++ programs and that can lead to crashes and unpredictable behaviour.
-
-```bash
-~$ make valgrind FILE=audit.log
-```
+The resulting `auditlog2json` binary file can then be placed and run anywhere on your computer of your choice.
 
 ## How to run
+
+```
+~$ ./auditlog2json -h
+USAGE
+        auditlog2json -f filename | [ -h | -v ]
+
+DESCRIPTION
+
+        Converts information  from IBM  iSeries  audit  report  log files  on an AS400
+        system to a JSON  format that is much more  understandable and easy to process
+        on most computers and systems.
+
+OPTIONS
+
+        -f, --file      File input with audit log data.
+        -v, --version   Print the program version.
+        -h, --help      Print this help.
+
+LICENSE
+
+        License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+        This is free software: you are free to change and redistribute it.
+        There is NO WARRANTY, to the extent permitted by law.
+```
+
+For example:
 
 ```bash
 ~$ ./auditlog2json -f audit.log
@@ -39,7 +83,7 @@ The [Valgrind](https://valgrind.org/docs/manual/quick-start.html) tool suite pro
 
 ```
                                                                            QUERY NAME . . QSECCD
-                                                                           LIBRARY NAME  . .QSYS
+                                                                           LIBRARY NAME . . QSYS
                                                              FILE      LIBRARY  MEMBER    FORMAT
                                                            QASYCDJ4  QTEMP    QASYCDJ4  QASYCDJ4
                                                                      DATE . . . . . . . 14/04/20
@@ -47,8 +91,8 @@ The [Valgrind](https://valgrind.org/docs/manual/quick-start.html) tool suite pro
 14/04/20  01:03:07                                                                     PAGE    1
   ENTRY  USER       OBJECT   LIBRARY PROG JOB        JOB       JOB    INDICATION
   TYPE   PROFILE    NAME     NAME    CL   NAME       USER      NUMBER HOUR
-SERIE
-MANDATO
+SERIAL
+COMMAND
 CD   C   MIMIXOWN   CHKOBJ   QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.045045
 CHKOBJ OBJ(MIMIX/H1SPCLVL) OBJTYPE(*DTAARA)
 CD   C   MIMIXOWN   CHKOBJ   QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.045637
@@ -87,6 +131,48 @@ DLYJOB DLY(5)
 {"headerQueryName": "QSECCD", "headerLibraryName": "QSYS", "headerFile": "QASYCDJ4", "headerLibrary": "QTEMP", "headerMember": "QASYCDJ4", "headerFormat": "QASYCDJ4", "headerDate": "14/04/20", "headerTime": "01:03:07", "typeInput": "CD", "mode": "C", "userProfile": "IOPTOWNER", "objectName": "SETAPGRP", "libraryName": "QSYS", "progCL": "E", "jobName": "IDDIRPRC", "jobUser": "IOPTOWNER", "jobNumber": "481339", "dateTime": "2020-04-14-00.00.00.704525", "commandLine": " SETASPGRP ASPGRP(*NONE)", "fileName": "audit.log", "serverName": "jdghost"}
 {"headerQueryName": "QSECCD", "headerLibraryName": "QSYS", "headerFile": "QASYCDJ4", "headerLibrary": "QTEMP", "headerMember": "QASYCDJ4", "headerFormat": "QASYCDJ4", "headerDate": "14/04/20", "headerTime": "01:03:07", "typeInput": "CD", "mode": "C", "userProfile": "ADMSSRA1", "objectName": "CHKOBJ", "libraryName": "QSYS", "progCL": "E", "jobName": "RMTSYSTEM", "jobUser": "CNDINST", "jobNumber": "886460", "dateTime": "2020-10-28-23.59.57.624928", "commandLine": " CHKOBJ OBJ(CDUQ886459) OBJTYPE(*USRQ)", "fileName": "audit.log", "serverName": "jdghost"}
 {"headerQueryName": "QSECCD", "headerLibraryName": "QSYS", "headerFile": "QASYCDJ4", "headerLibrary": "QTEMP", "headerMember": "QASYCDJ4", "headerFormat": "QASYCDJ4", "headerDate": "14/04/20", "headerTime": "01:03:07", "typeInput": "CD", "mode": "C", "userProfile": "MDOWNER", "objectName": "DLYJOB", "libraryName": "QSYS", "progCL": "Y", "jobName": "MDPUSH1", "jobUser": "MDOWNER", "jobNumber": "674561", "dateTime": "2020-10-28-23.59.59.052944", "commandLine": " DLYJOB DLY(5)", "fileName": "audit.log", "serverName": "jdghost"}
+```
+
+## Test
+
+To testing use [Check](https://github.com/libcheck/check), a unit testing framework for C. To run a test suite you can run `make test` as follows:
+
+```bash
+~$ make test
+```
+
+## Coverage
+
+This program uses [gcovr](https://github.com/gcovr/gcovr) in conjunction with [GCC](https://gcc.gnu.org/) to generate code coverage reports. To install it:
+
+```bash
+~$ sudo apt-get update
+~$ sudo apt-get install gcovr
+```
+
+To generate HTML code coverage reports:
+
+```bash
+~$ make coverage_report.html
+```
+
+This `make` option will first execute the tests and finally generate the code coverage report in HTML format. You can find it in the current directory as `*.html` files.
+
+## Memory check
+
+The [Valgrind](https://valgrind.org/docs/manual/quick-start.html) tool suite provides a number of debugging and profiling tools that help you make your programs faster and more correct. The most popular of these tools is called Memcheck. It can detect many memory-related errors that are common in C and C++ programs and that can lead to crashes and unpredictable behaviour.
+
+```bash
+~$ make valgrind FILE=audit.log
+```
+
+If everything is ok the output is:
+
+```
+==27052== All heap blocks were freed -- no leaks are possible
+==27052==
+==27052== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==27052== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
 ## Questions
