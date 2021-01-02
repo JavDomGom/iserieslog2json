@@ -1,0 +1,38 @@
+START LOG FOR USER MYUSER                                        ISERIES1 14/04/20 01:55:30 UTC-04:00S 
+ 5761SS1 V6R1M0 080215               Job Log           ISERIES1 14/04/20 11:50:41 UTC-00:00S   Page   1
+  Job s name  . . . . . : QPADEV0006  User . . . . . : MYUSER  Number . . . . . . . . . . . : 123456     
+  Job description . . : UXGZ        Library  . . . : MYLIB                                             
+MSGID      TYPE          SEV  DATE      TIME             FROM PGM  LIBRARY  INST  TO PGM  LIBRARY  INST
+CPF1124    Information   00   14/04/20  11:39:30.870509  QWTPIIPP  QSYS     04C0  *EXT             *N  
+                          Message . . . . :     Job 617286/MYUSER/QPADEV0006 started on 14/04/20 at    
+                            11:39:30 in subsystem QINTER in QSYS. Job entered system on 14/04/20 at    
+                            11:39:30.                                                                  
+*NONE      Request            14/04/20  11:40:10.421842  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+                          Message . . . . : -chgjob log(4 0 *seclvl) logclpgm(*yes)                    
+*NONE      Request            14/04/20  11:40:18.713278  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+                          Message . . . . : -dspcmd dspjob                                             
+*NONE      Request            14/04/20  11:40:28.509061  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+                          Message . . . . : -dspactjob                                                 
+CPD0030    Diagnostic    30   14/04/20  11:40:28.509831  QCARULE   QSYS     07E8  QUIMNDRV QSYS    060F
+                          Message . . . . : Command DSPACTJOB in library *LIBL not found.              
+                          Cause . . . . . : If a library was not specified, the command was not found  
+                            in the libraries in the library list. If a library was specified, the      
+                            command was not found there. One of the following special values may have  
+                            been used to specify the library: *LIBL - The command was not found in the 
+                            libraries in the library list *NLVLIBL - The command was not found in the  
+                            national language version libraries in the system library list. *SYSTEM -  
+                            The command was not found in library QSYS. Recovery . . . : Change the     
+                            command name or correct the library name, and then try the command again.  
+CPF0001    Diagnostic    30   14/04/20  11:40:28.509901  QCADRV2   QSYS     04D0  QUIMNDRV QSYS    060F
+                          Message . . . . : Error found on DSPACTJOB command.                          
+                          Cause . . . . . : The system detected errors in the command. Recovery . . .  
+                            : See the previously listed messages in the job log. Correct the errors    
+                            and then try the command again. *N instead of a command name means that the
+                            name had not been determined before the error was found.                   
+*NONE      Request            14/04/20  11:40:34.216999  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+Message . . . . : -wrkactjob                                                                           
+*NONE      Request            14/04/20  11:40:40.648586  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+Message . . . . : -wrkwtr                                                                              
+*NONE      Request            14/04/20  11:40:51.513711  QUICMD    QSYS     0542  QUICMD   QSYS    0542
+                          Message . . . . : -chgjob loglvl(4)                                          
+END LOG FOR USER   MYUSER                                         ISERIES1 14/04/20 01:55:30 UTC-04:00S

@@ -1,0 +1,29 @@
+                                                                           QUERY NAME . . QSECCD
+                                                                           LIBRARY NAME . . QSYS
+                                                             FILE      LIBRARY  MEMBER    FORMAT
+                                                           QASYCDJ4  QTEMP    QASYCDJ4  QASYCDJ4
+                                                                     DATE . . . . . . . 14/04/20
+                                                                     TIME . . . . . . . 01:03:07
+14/04/20  01:03:07                                                                     PAGE    1
+  ENTRY  USER       OBJECT   LIBRARY PROG JOB        JOB       JOB    INDICATION
+  TYPE   PROFILE    NAME     NAME    CL   NAME       USER      NUMBER HOUR
+SERIAL
+COMMAND
+CD   C   MIMIXOWN   CHKOBJ   QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.045045
+CHKOBJ OBJ(MIMIX/H1SPCLVL) OBJTYPE(*DTAARA)
+CD   C   MIMIXOWN   CHKOBJ   QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.045637
+CHKOBJ OBJ(MIMIX/HTSPCLVL) OBJTYPE(*DTAARA)
+CD   C   MIMIXOWN   CALL     QSYS     E   RCV_RUNCMD MIMIXOWN  481053 2020-04-14-00.00.00.104765
+CALL PGM(MXTHRUPUT) PARM('SOURCE')
+CD   X   QSECOFR    QSH      QSYS     B   BFI_HW     QSECOFR   481054 2020-04-14-00.00.00.113517
+CD   C   QBRMS      PING     QSYS     E   QBRMSYNC   QBRMS     481054 2020-04-14-00.00.00.115229
+QSYS/PING RMTSYS(BRMSG5) MSGMODE(*QUIET *ESCAPE) NBRPKT(1)
+CD   C   IOPTOWNER  CHGDTARA QSYS     Y   IDDIRPRC   IOPTOWNER 481339 2020-04-14-00.00.00.692237
+CD   C   IOPTOWNER  RCLRSC   QSYS     Y   IDDIRPRC   IOPTOWNER 481339 2020-04-14-00.00.00.692317
+CD   C   IOPTOWNER  SETAPGRP QSYS     E   IDDIRPRC   IOPTOWNER 481339 2020-04-14-00.00.00.704525
+SETASPGRP ASPGRP(*NONE)
+CD   C   ADMSSRA1   CHKOBJ   QSYS     E   RMTSYSTEM  CNDINST   886460 2020-10-28-23.59.57.624928
+CHKOBJ OBJ(CDUQ886459) OBJTYPE(*USRQ)
+CD   C   MDOWNER    DLYJOB   QSYS     Y   MDPUSH1    MDOWNER   674561 2020-10-28-23.59.59.052944
+DLYJOB DLY(5)
+* * * E N D  O F  R E P O R T * * *

@@ -1,46 +1,16 @@
-#include "../src/auditlog2json.h"
+#include "libcommon.h"
+#include "libauditlog.h"
 
-bool prefix (const char *pre, const char *str, size_t n)
+void auditProcessLogHeader (char *line, auditLog *al, int n_line)
 {
-	return strncmp (pre, str, n) == 0;
-}
-
-char *rtrim (const char *s)
-{
-	while (isspace (*s) || !isprint (*s)) ++s;
-	return strdup (s);
-}
-
-char *ltrim (const char *s)
-{
-	char *r = strdup(s);
-	if (r != NULL)
-	{
-		char *fr = r + strlen (s) - 1;
-		while ((isspace (*fr) || !isprint (*fr) || *fr == 0) && fr >= r) --fr;
-		*++fr = 0;
-	}
-	return r;
-}
-
-char *trim (const char *s)
-{
-	char *r = rtrim (s);
-	char *f = ltrim (r);
-	free (r);
-	return f;
-}
-
-void processLogHeader (char *line, auditLog *al, int n_line)
-{
-	char arr[HEADER_MAXWORDS][HEADER_MAXSTRLEN] = {0};
+	char arr[AUDIT_HEADER_MAXWORDS][AUDIT_HEADER_MAXSTRLEN] = {0};
 	char *pch;
 	int i = 0, k = 0;
 	pch = strtok (line, " .");
 
-	while (pch != NULL && k < HEADER_MAXWORDS)
+	while (pch != NULL && k < AUDIT_HEADER_MAXWORDS)
 	{
-		strncpy (arr[k++], pch, HEADER_MAXSTRLEN);
+		strncpy (arr[k++], pch, AUDIT_HEADER_MAXSTRLEN);
 		pch = strtok (NULL, " .");
 		i++;
 	}
@@ -68,7 +38,7 @@ void processLogHeader (char *line, auditLog *al, int n_line)
 	}
 }
 
-void processLogPage (char *line, auditLog *al, int *n_msgs)
+void auditProcessLogPage (char *line, auditLog *al, int *n_msgs)
 {
 	char *lastWord = strrchr (line, ' ');
 	struct tm tm;
@@ -79,19 +49,19 @@ void processLogPage (char *line, auditLog *al, int *n_msgs)
 	if (lastWord && strptime (lastWord + 1, "%Y-%m-%d-%H.%M.%S", &tm))
 	{
 		// Print last processed message if exist.
-		if (*n_msgs > 0) printStructToJSON (al);
+		if (*n_msgs > 0) auditPrintStructToJSON (al);
 
 		// Clean last commandLine if exist.
 		strcpy (al->commandLine, "");
 
-		char arr[PAGE_MAXWORDS][PAGE_MAXSTRLEN] = {0};
+		char arr[AUDIT_PAGE_MAXWORDS][AUDIT_PAGE_MAXSTRLEN] = {0};
 		char *pch;
 		int i = 0, k = 0;
 		pch = strtok (line, " ");
 
-		while (pch != NULL && k < PAGE_MAXWORDS)
+		while (pch != NULL && k < AUDIT_PAGE_MAXWORDS)
 		{
-			strncpy (arr[k++], pch, PAGE_MAXSTRLEN);
+			strncpy (arr[k++], pch, AUDIT_PAGE_MAXSTRLEN);
 			pch = strtok (NULL, " ");
 			i++;
 		}
@@ -115,7 +85,7 @@ void processLogPage (char *line, auditLog *al, int *n_msgs)
 	}
 }
 
-void printStructToJSON (auditLog *al)
+void auditPrintStructToJSON (auditLog *al)
 {
 	printf ("{\"headerQueryName\": \"%s\", ", al->headerQueryName);
 	printf ("\"headerLibraryName\": \"%s\", ", al->headerLibraryName);
@@ -140,28 +110,62 @@ void printStructToJSON (auditLog *al)
 	printf ("\"serverName\": \"%s\"}\n", al->serverName);
 }
 
-void printUsage ()
+void processAuditLog (char *filename)
 {
-	fputs (("USAGE\n"), stdout);
-	printf ("\t%s -f filename | [ -h | -v ]\n", PROGRAM_NAME);
-}
+	char *bname, *line = NULL;
+	int n_line = 0, n_msgs = 0;
+	size_t len = 0;
+	ssize_t read;
+	FILE *fp;
+	bool isPage = false;
 
-void help ()
-{
-	printUsage ();
-	fputs (("\nDESCRIPTION\n"), stdout);
-	fputs (("\n\
-\tConverts information  from IBM  iSeries  audit  report  log files  on an AS400\n\
-\tsystem to a JSON  format that is much more  understandable and easy to process\n\
-\ton most computers and systems.\n"), stdout);
-	fputs (("\nOPTIONS\n"), stdout);
-	fputs (("\n\
-\t-f, --file\tFile input with audit log data.\n\
-\t-v, --version\tPrint the program version.\n\
-\t-h, --help\tPrint this help.\n"), stdout);
-	fputs (("\nLICENSE\n"), stdout);
-	fputs (("\n\
-\tLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n\
-\tThis is free software: you are free to change and redistribute it.\n\
-\tThere is NO WARRANTY, to the extent permitted by law.\n"), stdout);
+	INIT_AUDITLOG (al);
+
+	fp = fopen (filename, "r");
+	if (fp == NULL) exit (EXIT_FAILURE);
+
+	bname = getBasename (filename);
+
+	// Set audit log file name as fileName field in auditLog struct.
+	strcpy (al.fileName, bname);
+
+	// Set second substring splitted by "_" from filename as serverName field in auditLog struct.
+	strcpy (al.serverName, getHostnameFromFilename (bname));
+
+	while ((read = getline (&line, &len, fp)) != -1)
+	{
+		char *trim_line = trim (line);
+
+		// The first six lines are the header. The third line can be excluded.
+		if (!isPage && (n_line <= 5) && (n_line != 2)) auditProcessLogHeader (trim_line, &al, n_line);
+
+		// If trim_line starts with "* * *" is the end of log.
+		// Print last processed message and break loop.
+		if (prefix (trim_line, "* * *", 5))
+		{
+			auditPrintStructToJSON (&al);
+			free (trim_line);
+			break;
+		}
+
+		// If trim_line starts with al.headerDate is a new page.
+		// Set isPage to true and reset n_line to 0 to control page lines.
+		if (prefix (trim_line, al.headerDate, AUDIT_HEADER_MAXSTRLEN - 2))
+		{
+			isPage = true;
+			n_line = 0;
+			free (trim_line);
+			continue;
+		}
+
+		// If it's a page, the lines are processed from the fourth n_line.
+		if (isPage && (n_line > 3)) auditProcessLogPage (trim_line, &al, &n_msgs);
+
+		free (trim_line);
+		n_line++;
+	}
+
+	free (line);
+	free (bname);
+	fclose (fp);
 }

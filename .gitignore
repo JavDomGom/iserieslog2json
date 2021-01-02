@@ -2,6 +2,8 @@
 # Log files
 *.log
 *.txt
+!AUDIT_HOSTNAME_YYYYMMDD.txt
+!JOBLOG_HOSTNAME_YYYYMMDD.log
 
 # Prerequisites
 *.d
@@ -237,8 +239,8 @@ tags
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/tasks.json
-!.vscode/launch.json
+.vscode/tasks.json
+.vscode/launch.json
 *.code-workspace
 
 ### VisualStudioCode Patch ###

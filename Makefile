@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -g
-PROGRAM_NAME=auditlog2json
+PROGRAM_NAME=iserieslog2json
 PREFIX=/usr/local/bin
 VALGRINDFLAGS=--tool=memcheck --leak-check=full --show-leak-kinds=all -v
 PROFILE_FLAGS=-fprofile-arcs -ftest-coverage
@@ -8,46 +8,63 @@ TST_LIBS=-lcheck -lm -lpthread -lrt -lsubunit
 COV_LIBS=-lgcov -coverage
 SRC_DIR=src
 TST_DIR=tests
+TST_BIN=check_$(PROGRAM_NAME)_tests
 SRC_FILES=$(addprefix $(SRC_DIR)/, *.c)
-LIB_FILES=$(addprefix $(SRC_DIR)/, $(PROGRAM_NAME).*)
+LIB_FILES=$(addprefix $(SRC_DIR)/, lib*.*)
 TST_FILES=$(addprefix $(TST_DIR)/, *.c)
 GCOV=gcovr
 GCONV_FLAGS=-r . --html --html-details
 
-all: coverage_report.html
+all: coverage
 
-$(PROGRAM_NAME).o: $(LIB_FILES)
+build_lib_objects: $(LIB_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Building object files for each library source files ..."
 	$(CC) -c $(CFLAGS) $(PROFILE_FLAGS) $(LIB_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
-check_$(PROGRAM_NAME).o: $(TST_FILES)
-	$(CC) -c $(CFLAGS) $(PROFILE_FLAGS)  $(TST_FILES)
+build_tst_objects: $(TST_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Building object files for each testing source files ..."
+	$(CC) -c $(CFLAGS) $(PROFILE_FLAGS) $(TST_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
-check_$(PROGRAM_NAME)_tests: $(PROGRAM_NAME).o check_$(PROGRAM_NAME).o
-	$(CC) $(PROGRAM_NAME).o check_$(PROGRAM_NAME).o $(TST_LIBS) $(COV_LIBS) -o check_$(PROGRAM_NAME)_tests
+$(TST_BIN): build_lib_objects build_tst_objects build
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Building $(TST_BIN) binary ..."
+	$(CC) lib*.o check_$(PROGRAM_NAME).o $(TST_LIBS) $(COV_LIBS) -o $(TST_BIN)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
-test: check_$(PROGRAM_NAME)_tests
-	./check_$(PROGRAM_NAME)_tests
+test: $(TST_BIN)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Running unit tests ..."
+	./$(TST_BIN)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
-coverage_report.html: test
+coverage: test
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Generating code coverage report ..."
 	$(GCOV) $(GCONV_FLAGS) -o coverage_report.html
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
 build: $(SRC_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Building $(PROGRAM_NAME) binary ..."
 	$(CC) $(CFLAGS) -o $(PROGRAM_NAME) $(SRC_FILES)
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
 install: build
-	@echo "Installing $(PROGRAM_NAME) ..."
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Installing $(PROGRAM_NAME) ..."
 	install -m 0755 $(PROGRAM_NAME) $(PREFIX)
-	@echo "Done!"
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
 uninstall: $(PREFIX)/$(PROGRAM_NAME)
-	@echo "Uninstall $(PROGRAM_NAME) from '$(PREFIX)' ..."
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Uninstall $(PROGRAM_NAME) from '$(PREFIX)' ..."
 	rm -f $(PREFIX)/$(PROGRAM_NAME)
-	@echo "Done!"
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
 valgrind: build
-	valgrind $(VALGRINDFLAGS) ./$(PROGRAM_NAME) -f $(FILE) > /dev/null
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Running memory check ..."
+	valgrind $(VALGRINDFLAGS) ./$(PROGRAM_NAME) -f $(FILE) -t $(TYPE)> /dev/null
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
 clean:
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Cleaning workdir ..."
 	rm -f *.o *.html *.gcda *.gcno $(addprefix $(SRC_DIR)/, *.gch) *$(PROGRAM_NAME)*
+	@echo "`date +'%Y/%m/%d %H:%M:%S'` [$@] Done!"
 
-.PHONY: all test build install uninstall valgrind clean
+.PHONY: all build_lib_objects build_tst_objects test coverage build install uninstall valgrind clean
