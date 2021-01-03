@@ -1,6 +1,6 @@
 START LOG FOR USER MYUSER                                        ISERIES1 14/04/20 01:55:30 UTC-04:00S 
  5761SS1 V6R1M0 080215               Job Log           ISERIES1 14/04/20 11:50:41 UTC-00:00S   Page   1
-  Job s name  . . . . . : QPADEV0006  User . . . . . : MYUSER  Number . . . . . . . . . . . : 123456     
+  Job name  . . . . . : QPADEV0006  User . . . . . : MYUSER  Number . . . . . . . . . . . : 123456     
   Job description . . : UXGZ        Library  . . . : MYLIB                                             
 MSGID      TYPE          SEV  DATE      TIME             FROM PGM  LIBRARY  INST  TO PGM  LIBRARY  INST
 CPF1124    Information   00   14/04/20  11:39:30.870509  QWTPIIPP  QSYS     04C0  *EXT             *N  

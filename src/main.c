@@ -5,13 +5,14 @@
 int main (int argc, char *argv[])
 {
 	int opt;
-	char *filename = "", *type = "";
+	char *file = "", *type = "", *language = "";
 
 	while (1)
 	{
 		static struct option long_options[] =
 		{
 			{"file", required_argument, 0, 'f'},
+			{"language",  required_argument, 0, 'l'},
 			{"type", required_argument, 0, 't'},
 			{"help", no_argument, 0, 'h'},
 			{"version", no_argument, 0, 'v'}
@@ -20,7 +21,7 @@ int main (int argc, char *argv[])
 		/* getopt_long stores the option index here. */
 		int option_index = 0;
 
-		opt = getopt_long (argc, argv, "f:t:hv", long_options, &option_index);
+		opt = getopt_long (argc, argv, "f:l:t:hv", long_options, &option_index);
 
 		/* Detect the end of the options. */
 		if (opt == -1) break;
@@ -34,7 +35,10 @@ int main (int argc, char *argv[])
 				help ();
 				exit (EXIT_SUCCESS);
 			case 'f':
-				filename = optarg;
+				file = optarg;
+				break;
+			case 'l':
+				language = optarg;
 				break;
 			case 't':
 				type = optarg;
@@ -58,10 +62,18 @@ int main (int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 
-	if (!*filename || !*type)
+	if (!*file || !*language || !*type)
 	{
-		if (!*filename) printf ("Option -f, --file is mandatory!\n");
+		if (!*file) printf ("Option -f, --file is mandatory!\n");
+		if (!*language) printf ("Option -l, --language is mandatory!\n");
 		if (!*type) printf ("Option -t, --type is mandatory!\n");
+		printUsage ();
+		exit (EXIT_FAILURE);
+	}
+
+	if (strcmp (language, "en") && strcmp (language, "es")) 
+	{
+		printf("Language \"%s\" is not valid.\n", language);
 		printUsage ();
 		exit (EXIT_FAILURE);
 	}
@@ -69,15 +81,16 @@ int main (int argc, char *argv[])
 	if (!strcmp (type, "audit")) 
 	{
 		#include "libauditlog.h"
-		processAuditLog (filename);
-	} 
+		processAuditLog (file);
+	}
 	else if (!strcmp (type, "job"))
 	{
 		#include "libjoblog.h"
-		processJobLog (filename);
+		processJobLog (file, language);
 	}
 	else
 	{
+		printf("Type \"%s\" is not valid.\n", type);
 		printUsage ();
 		exit (EXIT_FAILURE);
 	}

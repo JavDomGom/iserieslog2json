@@ -65,7 +65,7 @@ void jobProcessLogPage (char *line, jobLog *jl, int *n_msgs)
 	}
 }
 
-void jobProcessJobAttributes (char *line, jobLog *jl, int n_line)
+void jobProcessJobAttributes (char *line, jobLog *jl, int n_line, char *language)
 {
 	char arr[JOB_ATTR_MAXWORDS][JOB_ATTR_MAXSTRLEN] = {0};
 	char *pch;
@@ -74,8 +74,16 @@ void jobProcessJobAttributes (char *line, jobLog *jl, int n_line)
 	switch (n_line)
 	{
 	case 2:
-		a_field = 3;
-		b_field = 7;
+		if (!strcmp (language, "en"))
+		{
+			a_field = 2;
+			b_field = 6;
+		}
+		else if (!strcmp (language, "es"))
+		{
+			a_field = 3;
+			b_field = 7;
+		}
 		break;
 	case 3:
 		a_field = 2;
@@ -173,9 +181,9 @@ void jobPrintStructToJSON (jobLog *jl)
 	printf ("\"msg\": \"%s\"}\n", jl->msg);
 }
 
-void processJobLog (char *filename)
+void processJobLog (char *filename, char *language)
 {
-	char *line = NULL;
+	char *line = NULL, *job_prefix_log_ini = NULL, *job_prefix_log_end = NULL;
 	int n_line = 0, n_msgs = 0;
 	size_t len = 0;
 	ssize_t read;
@@ -187,24 +195,29 @@ void processJobLog (char *filename)
 	fp = fopen (filename, "r");
 	if (fp == NULL) exit (EXIT_FAILURE);
 
+	if (!strcmp (language, "en"))
+	{
+		job_prefix_log_ini = JOB_PREFIX_LOG_INI_EN;
+		job_prefix_log_end = JOB_PREFIX_LOG_END_EN;
+	}
+	else if (!strcmp (language, "es"))
+	{
+		job_prefix_log_ini = JOB_PREFIX_LOG_INI_ES;
+		job_prefix_log_end = JOB_PREFIX_LOG_END_ES;
+	}
+
 	while ((read = getline (&line, &len, fp)) != -1)
 	{
 		char *ltrim_line = ltrim (line);
 
-		// If line starts with JOB_PREFIX_LOG_INI_*.
-		if (
-			prefix (ltrim_line, JOB_PREFIX_LOG_INI_EN, strlen (JOB_PREFIX_LOG_INI_EN)) ||
-			prefix (ltrim_line, JOB_PREFIX_LOG_INI_ES, strlen (JOB_PREFIX_LOG_INI_ES))
-		)
+		// If line starts with job_prefix_log_ini.
+		if (prefix (ltrim_line, job_prefix_log_ini, strlen (job_prefix_log_ini)))
 		{
 			jobProcessLogHeader (ltrim_line, &jl);
 		}
 
-		// If line starts with JOB_PREFIX_LOG_END_* don't process and continue.
-		if (
-			prefix (ltrim_line, JOB_PREFIX_LOG_END_EN, strlen (JOB_PREFIX_LOG_END_EN)) ||
-			prefix (ltrim_line, JOB_PREFIX_LOG_END_ES, strlen (JOB_PREFIX_LOG_END_ES))
-		)
+		// If line starts with job_prefix_log_end don't process and continue.
+		if (prefix (ltrim_line, job_prefix_log_end, strlen (job_prefix_log_end)))
 		{
 			isPage = false;
 			n_line = 0;
@@ -216,7 +229,7 @@ void processJobLog (char *filename)
 		if (n_line == 1) jobProcessPageHeader (ltrim_line, &jl);
 
 		// If 3th or 4th lines.
-		if (n_line == 2 || n_line == 3) jobProcessJobAttributes (ltrim_line, &jl, n_line);
+		if (n_line == 2 || n_line == 3) jobProcessJobAttributes (ltrim_line, &jl, n_line, language);
 
 		// If line starts with JOB_PREFIX_MSG_HEADER_* don't process and continue..
 		if (

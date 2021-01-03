@@ -113,14 +113,26 @@ START_TEST (test_jobProcessJobAttributes)
 {
 	char *ltrim_line = NULL;
 
-	ltrim_line = trim ("  Job s name  . . . . . : QPADEV0006  User . . . . . : MYUSER  Number . . . . . . . . . . . : 123456   ");
-	jobProcessJobAttributes (ltrim_line, &jl, 2);
+	ltrim_line = trim ("  Job name  . . . . . : QPADEV0006  User . . . . . : MYUSER  Number . . . . . . . . . . . : 123456   ");
+	jobProcessJobAttributes (ltrim_line, &jl, 2, "en");
 
 	ck_assert_str_eq (jl.jobName, "QPADEV0006");
 	ck_assert_str_eq (jl.jobNumber, "123456");
 
-	ltrim_line = trim ("  Job description . . : UXGZ   Library  . . . : MYLIB   ");
-	jobProcessJobAttributes (ltrim_line, &jl, 3);
+	ltrim_line = trim ("  Nombre de trabajo  . . . . . :   QPADEV0006  Usuario . . . . . . : XE45930  N�mero . . . . . . . . . . . :   123456   ");
+	jobProcessJobAttributes (ltrim_line, &jl, 2, "es");
+
+	ck_assert_str_eq (jl.jobName, "QPADEV0006");
+	ck_assert_str_eq (jl.jobNumber, "123456");
+
+	ltrim_line = trim ("  Job description . . : UXGZ  Library  . . . : MYLIB   ");
+	jobProcessJobAttributes (ltrim_line, &jl, 3, "en");
+
+	ck_assert_str_eq (jl.jobDescription, "UXGZ");
+	ck_assert_str_eq (jl.jobLibrary, "MYLIB");
+
+	ltrim_line = trim ("  Descripci�n trabajo . . . . . :  UXGZ  Biblioteca  . . . : MYLIB   ");
+	jobProcessJobAttributes (ltrim_line, &jl, 3, "es");
 
 	ck_assert_str_eq (jl.jobDescription, "UXGZ");
 	ck_assert_str_eq (jl.jobLibrary, "MYLIB");

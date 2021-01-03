@@ -52,7 +52,7 @@ The resulting `iserieslog2json` binary file can then be placed and run anywhere 
 ```
 ~$ ./iserieslog2json -h
 USAGE
-        iserieslog2json [-f filename] [-t audit|job] [-h] [-v]
+        iserieslog2json [-f filename] [-t audit|job] [-l en|es] [-h] [-v]
 
 DESCRIPTION
 
@@ -62,6 +62,8 @@ DESCRIPTION
 OPTIONS
 
         -f, --file      Log file with input data.
+        -l, --language  Logs language. In  this  version  only the values "en" and "es"
+                        are valid.
         -t, --type      Type log  data. In  this  version  only the values "audit" and
                         "job" are valid.
         -v, --version   Print the program version.

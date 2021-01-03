@@ -46,7 +46,7 @@ char *trim (const char *s)
 void printUsage ()
 {
 	fputs (("USAGE\n"), stdout);
-	printf ("\t%s [-f filename] [-t audit|job] [-h] [-v]\n", PROGRAM_NAME);
+	printf ("\t%s [-f filename] [-t audit|job] [-l en|es] [-h] [-v]\n", PROGRAM_NAME);
 }
 
 void help ()
@@ -59,6 +59,8 @@ void help ()
 	fputs (("\nOPTIONS\n"), stdout);
 	fputs (("\n\
 \t-f, --file\tLog file with input data.\n\
+\t-l, --language\tLogs language. In  this  version  only the values \"en\" and \"es\"\n\
+\t\t\tare valid.\n\
 \t-t, --type\tType log  data. In  this  version  only the values \"audit\" and\n\
 \t\t\t\"job\" are valid.\n\
 \t-v, --version\tPrint the program version.\n\

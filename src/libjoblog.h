@@ -47,10 +47,10 @@ typedef struct
 void jobProcessLogHeader (char *line, jobLog *jl);
 void jobProcessPageHeader (char *line, jobLog *jl);
 void jobProcessLogPage (char *line, jobLog *jl, int *n_msgs);
-void jobProcessJobAttributes (char *line, jobLog *jl, int n_line);
+void jobProcessJobAttributes (char *line, jobLog *jl, int n_line, char *language);
 void jobProcessMsgHeader (char *line, jobLog *jl);
 void jobPrintStructToJSON (jobLog *jl);
-void processJobLog (char *filename);
+void processJobLog (char *filename, char *language);
 
 #define INIT_JOBLOG(X) jobLog X = { \
 	.user = "", \
