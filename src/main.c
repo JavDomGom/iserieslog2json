@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <getopt.h>
 #include "libcommon.h"
+#include "libauditlog.h"
+#include "libjoblog.h"
 
 int main (int argc, char *argv[])
 {
@@ -80,12 +82,10 @@ int main (int argc, char *argv[])
 
 	if (!strcmp (type, "audit")) 
 	{
-		#include "libauditlog.h"
 		processAuditLog (file);
 	}
 	else if (!strcmp (type, "job"))
 	{
-		#include "libjoblog.h"
 		processJobLog (file, language);
 	}
 	else
