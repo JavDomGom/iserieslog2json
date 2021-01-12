@@ -5,7 +5,6 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Release](https://img.shields.io/badge/release-v1.0.0-brightgreen)](https://github.com/JavDomGom/iserieslog2json/releases/latest)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/JavDomGom/iserieslog2json)
-[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JavDomGom/iserieslog2json.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JavDomGom/iserieslog2json/context:cpp)
 [![Build Status](https://travis-ci.com/JavDomGom/iserieslog2json.svg?branch=main)](https://travis-ci.com/github/JavDomGom/iserieslog2json)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 
@@ -79,13 +78,13 @@ LICENSE
 For example:
 
 ```bash
-~$ ./iserieslog2json -f AUDIT_HOSTNAME_YYYYMMDD.txt -t audit
+~$ ./iserieslog2json -f AUDIT_HOSTNAME_YYYYMMDD.txt -t audit -l en
 ```
 
 or
 
 ```bash
-~$ ./iserieslog2json -f JOB_HOSTNAME_YYYYMMDD.txt -t job
+~$ ./iserieslog2json -f JOB_HOSTNAME_YYYYMMDD.txt -t job -l en
 ```
 
 ### Input data (e.g AUDIT_HOSTNAME_YYYYMMDD.txt file)
